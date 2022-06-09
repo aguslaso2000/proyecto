@@ -1,0 +1,51 @@
+# Creacion de base y tablas
+DROP DATABASE IF EXISTS biblioteca;
+CREATE DATABASE biblioteca;
+USE biblioteca;
+
+CREATE TABLE usuarios (
+	dni			CHAR(9) NOT NULL PRIMARY KEY,
+	nombre		VARCHAR(50) NOT NULL,
+	apellido1	VARCHAR(50) NOT NULL,
+	apellido2	VARCHAR(50),
+	pass		VARCHAR(50) NOT NULL
+	);
+
+CREATE TABLE autores (
+	autor_id	INT AUTO_INCREMENT PRIMARY KEY,
+	nombre		VARCHAR(50) NOT NULL,
+	apellido1	VARCHAR(50) NOT NULL,
+	apellido2	VARCHAR(50)
+	);
+
+CREATE TABLE generos (
+	autor_id	INT AUTO_INCREMENT PRIMARY KEY,
+	nombre		VARCHAR(50) NOT NULL
+	);
+
+CREATE TABLE libros (
+	id			INT AUTO_INCREMENT PRIMARY KEY,
+	nombre		VARCHAR(50) NOT NULL,
+	genero_id	INT NOT NULL,
+	autor_id	INT NOT NULL,
+	CONSTRAINT	generofk FOREIGN KEY (genero_id)
+		REFERENCES generos(genero_id)
+		ON DELETE CASCADE,
+	CONSTRAINT	autorfk FOREIGN KEY (autor_id)
+		REFERENCES autores(autor_id)
+		ON DELETE CASCADE
+	);
+
+CREATE TABLE reserva_libros (
+	idUs		CHAR(9),
+	idLbr		INT,
+	fecha_hora	DATETIME NOT NULL,
+	PRIMARY KEY	(idPst, fecha_hora),
+	CONSTRAINT	usuariofk FOREIGN KEY (idUs)
+		REFERENCES usuarios(dni)
+		ON DELETE CASCADE,
+	CONSTRAINT	librosfk FOREIGN KEY (idLbr)
+		REFERENCES libros(id)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE
+	);
